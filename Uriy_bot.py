@@ -4,6 +4,7 @@ import logging
 import settings
 import ephem
 import datetime
+import re
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
                     level=logging.INFO,
                     filename='logbot.log'
@@ -50,6 +51,18 @@ def input_planet(bot, update):
         update.message.reply_text(warning_message)
         logging.info(warning_log_message)
 
+def word_count(bot, update):
+    phrase = update.message.text
+    signs = [",", ".", "!", "?", "(", ")", "-", "_"]
+    for letter in signs:
+        phrase = phrase.replace(letter, " ")
+ 
+    print (phrase)
+    new_phrase = phrase.split()
+    lenght_phrase = len(new_phrase)-1
+    update.message.reply_text("Вы ввели: {} слова".format(lenght_phrase))
+    logging.info("Input some text")
+
 
 
 
@@ -61,6 +74,7 @@ def main():
     dp = my_bot.dispatcher
     dp.add_handler(CommandHandler('start', greet_user))
     dp.add_handler(CommandHandler('planet', input_planet))
+    dp.add_handler(CommandHandler('wordcount', word_count))
     dp.add_handler(MessageHandler(Filters.text, talk_to_me))
     
 
